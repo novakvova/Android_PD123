@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         txtInfo=findViewById(R.id.txtInfo);
 
         ivMyImage=findViewById(R.id.ivMyImage);
-        String url = "https://pipi.itstep.click/images/monika.jpg";
+//        String url = "https://pipi.itstep.click/images/monika.jpg";
+        String url = "http://10.0.2.2:5236/images/1.jpg";
         Glide
                 .with(this)
                 .load(url)
