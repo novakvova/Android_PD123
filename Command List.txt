@@ -2,6 +2,15 @@ docker build -t web_pipi .
 docker run -it --rm -p 5926:80 --name web_pip_container web_pipi
 docker run -d --restart=always --name web_pip_container -p 5926:80 web_pipi
 
+docker run -d --restart=always -v C:/images:/app/images --name web_pip_container -p 5926:80 web_pipi
+
+-----Hosting Ubuntu-----
+docker build -t pipi_image .
+docker run -d --restart=always -v /var/www/android/pipi.itstep.click/images:/app/images --name web_pip_container -p 5926:80 pipi_image
+
+docker ps
+docker ps -a
+
 http://localhsot:5453
 
 cd WebDocker
