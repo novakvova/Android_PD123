@@ -8,6 +8,12 @@ docker run -d --restart=always -v C:/images:/app/images --name web_pip_container
 docker build -t pipi_image .
 docker run -d --restart=always -v /var/www/android/pipi.itstep.click/images:/app/images --name web_pip_container -p 5926:80 pipi_image
 
+docker stop web_pip_container
+docker rm web_pip_container
+docker rmi pipi_image
+
+
+
 docker ps
 docker ps -a
 
