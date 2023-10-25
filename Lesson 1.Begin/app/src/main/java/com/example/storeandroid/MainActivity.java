@@ -1,6 +1,8 @@
 package com.example.storeandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,29 +12,53 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.storeandroid.category.CategoriesAdapter;
+import com.example.storeandroid.dto.category.CategoryItemDTO;
+import com.example.storeandroid.service.ApplicationNetwork;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText txtInfo;
-    private ImageView ivMyImage;
+    CategoriesAdapter categoriesAdapter;
+    RecyclerView rcSholom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txtInfo=findViewById(R.id.txtInfo);
 
-        ivMyImage=findViewById(R.id.ivMyImage);
-//        String url = "https://pipi.itstep.click/images/monika.jpg";
-        String url = "http://10.0.2.2:5236/images/1.jpg";
-        Glide
-                .with(this)
-                .load(url)
-                .apply(new RequestOptions().override(600))
-                .into(ivMyImage);
+        rcSholom=findViewById(R.id.rcSholom);
+        rcSholom.setHasFixedSize(true);
+        rcSholom.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
+        rcSholom.setAdapter(new CategoriesAdapter(new ArrayList<>()));
     }
 
     public void onClickHandler(View view) {
-        String text = txtInfo.getText().toString();
-        Log.d("my-tag","-----Нажали кнопку------"+ text);
+        Log.d("Jon", "Hello");
+        ApplicationNetwork
+                .getInstance()
+                .getCategoriesApi()
+                .list()
+                .enqueue(new Callback<List<CategoryItemDTO>>() {
+                    @Override
+                    public void onResponse(Call<List<CategoryItemDTO>> call, Response<List<CategoryItemDTO>> response) {
+                        if(response.isSuccessful()) {
+                            List<CategoryItemDTO> data = response.body();
+                            categoriesAdapter = new CategoriesAdapter(data);
+                            rcSholom.setAdapter(categoriesAdapter);
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CategoryItemDTO>> call, Throwable t) {
+
+                    }
+                });
     }
 }
