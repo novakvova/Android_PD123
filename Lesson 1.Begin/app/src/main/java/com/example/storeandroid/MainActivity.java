@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.storeandroid.category.CategoriesAdapter;
+import com.example.storeandroid.category.CategoryCreateActivity;
 import com.example.storeandroid.dto.category.CategoryItemDTO;
 import com.example.storeandroid.service.ApplicationNetwork;
 
@@ -36,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
         rcSholom.setHasFixedSize(true);
         rcSholom.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         rcSholom.setAdapter(new CategoriesAdapter(new ArrayList<>()));
+    }
+
+    public void onClickGoToCategoryCreate(View view) {
+        Intent intent = new Intent(MainActivity.this, CategoryCreateActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onClickHandler(View view) {
