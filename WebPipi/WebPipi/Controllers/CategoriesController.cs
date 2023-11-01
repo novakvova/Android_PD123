@@ -47,6 +47,7 @@ namespace WebPipi.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)
         {
+            var request = this.Request;
             try
             {
                 var cat = _mapper.Map<CategoryEntity>(model);

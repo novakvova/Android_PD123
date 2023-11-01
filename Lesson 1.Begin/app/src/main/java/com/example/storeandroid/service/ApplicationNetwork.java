@@ -13,6 +13,7 @@ public class ApplicationNetwork {
     public ApplicationNetwork() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://pipi.itstep.click")
+               // .baseUrl("http://10.0.2.2:5236")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
