@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     CategoriesAdapter categoriesAdapter;
     RecyclerView rcSholom;
@@ -38,15 +38,10 @@ public class MainActivity extends AppCompatActivity {
         rcSholom.setHasFixedSize(true);
         rcSholom.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         rcSholom.setAdapter(new CategoriesAdapter(new ArrayList<>()));
+        loadList();
     }
 
-    public void onClickGoToCategoryCreate(View view) {
-        Intent intent = new Intent(MainActivity.this, CategoryCreateActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void onClickHandler(View view) {
+    private void loadList() {
         Log.d("Jon", "Hello");
         ApplicationNetwork
                 .getInstance()
@@ -59,13 +54,11 @@ public class MainActivity extends AppCompatActivity {
                             List<CategoryItemDTO> data = response.body();
                             categoriesAdapter = new CategoriesAdapter(data);
                             rcSholom.setAdapter(categoriesAdapter);
-
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<CategoryItemDTO>> call, Throwable t) {
-
                     }
                 });
     }
