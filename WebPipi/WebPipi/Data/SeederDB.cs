@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WebPipi.Constants;
 using WebPipi.Data.Entities;
+using WebPipi.Data.Entities.Identity;
 
 namespace WebPipi.Data
 {
@@ -12,6 +15,45 @@ namespace WebPipi.Data
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppEFContext>();
                 context.Database.Migrate();
+                var userManager = scope.ServiceProvider
+                    .GetRequiredService<UserManager<UserEntity>>();
+
+                var roleManager = scope.ServiceProvider
+                    .GetRequiredService<RoleManager<RoleEntity>>();
+
+                if (!context.Roles.Any())
+                {
+                    RoleEntity admin = new RoleEntity
+                    {
+                        Name = Roles.Admin,
+                    };
+                    RoleEntity user = new RoleEntity
+                    {
+                        Name = Roles.User,
+                    };
+                    var result = roleManager.CreateAsync(admin).Result;
+                    result = roleManager.CreateAsync(user).Result;
+                }
+
+                if (!context.Users.Any())
+                {
+                    UserEntity user = new UserEntity
+                    {
+                        FirstName = "Марко",
+                        LastName = "Муха",
+                        Email = "muxa@gmail.com",
+                        UserName = "muxa@gmail.com",
+                    };
+                    var result = userManager.CreateAsync(user, "123456")
+                        .Result;
+                    if (result.Succeeded)
+                    {
+                        result = userManager
+                            .AddToRoleAsync(user, Roles.Admin)
+                            .Result;
+                    }
+                }
+
                 if (!context.Categories.Any())
                 {
                     var laptop = new CategoryEntity
