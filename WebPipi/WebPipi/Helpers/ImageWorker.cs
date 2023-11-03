@@ -39,9 +39,9 @@ namespace WebPipi.Helpers
                 var saveImage = CompressImage(img, 1200, 1200, false);
                 saveImage.Save(dirSave, ImageFormat.Jpeg);
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Файл не вдалося зберегти!");
+                throw new Exception("Файл не вдалося зберегти!" + ex.Message);
             }
             return fileName;
         }
