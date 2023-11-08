@@ -7,17 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebPipi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentitytable : Migration
+    public partial class Addinitdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "UserEntityId",
-                table: "tblCategories",
-                type: "integer",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -168,10 +162,29 @@ namespace WebPipi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_tblCategories_UserEntityId",
-                table: "tblCategories",
-                column: "UserEntityId");
+            migrationBuilder.CreateTable(
+                name: "tblCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Image = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tblCategories_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -210,21 +223,15 @@ namespace WebPipi.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_tblCategories_AspNetUsers_UserEntityId",
+            migrationBuilder.CreateIndex(
+                name: "IX_tblCategories_UserId",
                 table: "tblCategories",
-                column: "UserEntityId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_tblCategories_AspNetUsers_UserEntityId",
-                table: "tblCategories");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -241,18 +248,13 @@ namespace WebPipi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "tblCategories");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_tblCategories_UserEntityId",
-                table: "tblCategories");
-
-            migrationBuilder.DropColumn(
-                name: "UserEntityId",
-                table: "tblCategories");
         }
     }
 }

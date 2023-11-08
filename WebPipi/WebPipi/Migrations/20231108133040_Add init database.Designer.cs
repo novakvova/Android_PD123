@@ -12,8 +12,8 @@ using WebPipi.Data;
 namespace WebPipi.Migrations
 {
     [DbContext(typeof(AppEFContext))]
-    [Migration("20231103135407_Add Identity table")]
-    partial class AddIdentitytable
+    [Migration("20231108133040_Add init database")]
+    partial class Addinitdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,12 +145,12 @@ namespace WebPipi.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<int?>("UserEntityId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserEntityId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("tblCategories");
                 });
@@ -316,9 +316,13 @@ namespace WebPipi.Migrations
 
             modelBuilder.Entity("WebPipi.Data.Entities.CategoryEntity", b =>
                 {
-                    b.HasOne("WebPipi.Data.Entities.Identity.UserEntity", null)
+                    b.HasOne("WebPipi.Data.Entities.Identity.UserEntity", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("UserEntityId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebPipi.Data.Entities.Identity.UserRoleEntity", b =>

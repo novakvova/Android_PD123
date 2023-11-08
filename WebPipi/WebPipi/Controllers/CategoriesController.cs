@@ -5,11 +5,13 @@ using WebPipi.Data.Entities;
 using WebPipi.Data;
 using WebPipi.Models.Category;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebPipi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly AppEFContext _appEFContext;

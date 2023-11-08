@@ -142,12 +142,12 @@ namespace WebPipi.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<int?>("UserEntityId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserEntityId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("tblCategories");
                 });
@@ -313,9 +313,13 @@ namespace WebPipi.Migrations
 
             modelBuilder.Entity("WebPipi.Data.Entities.CategoryEntity", b =>
                 {
-                    b.HasOne("WebPipi.Data.Entities.Identity.UserEntity", null)
+                    b.HasOne("WebPipi.Data.Entities.Identity.UserEntity", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("UserEntityId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebPipi.Data.Entities.Identity.UserRoleEntity", b =>
